@@ -19,7 +19,9 @@ class _ViewSalesScreenState extends State<ViewSalesScreen> with SingleTickerProv
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _loadSales();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSales();
+    });
   }
 
   @override

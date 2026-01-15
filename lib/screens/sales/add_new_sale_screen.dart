@@ -176,10 +176,28 @@ class _AddNewSaleScreenState extends State<AddNewSaleScreen> {
 
     if (success) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Row(
+              children: [
+                Icon(Icons.check_circle, color: AppTheme.gold, size: 32),
+                const SizedBox(width: 12),
+                const Text('Success'),
+              ],
+            ),
             content: Text('Sale completed successfully! Total: \$${_getTotalAmount().toStringAsFixed(2)}'),
-            backgroundColor: Colors.green,
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.gold,
+                ),
+                child: const Text('OK'),
+              ),
+            ],
           ),
         );
         
@@ -192,10 +210,26 @@ class _AddNewSaleScreenState extends State<AddNewSaleScreen> {
       }
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to complete sale. Please try again.'),
-            backgroundColor: Colors.red,
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Row(
+              children: [
+                Icon(Icons.error, color: Colors.red, size: 32),
+                SizedBox(width: 12),
+                Text('Error'),
+              ],
+            ),
+            content: const Text('Failed to save sale'),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.gold,
+                ),
+                child: const Text('OK'),
+              ),
+            ],
           ),
         );
       }

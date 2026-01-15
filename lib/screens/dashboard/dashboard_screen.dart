@@ -4,10 +4,15 @@ import 'dart:async';
 import '../../providers/auth_provider.dart';
 import '../../providers/product_provider.dart';
 import '../../providers/bulk_sales_provider.dart';
+import '../../providers/purchases_provider.dart';
+import '../../providers/other_income_provider.dart';
+import '../../providers/expense_provider.dart';
 import '../../utils/app_theme.dart';
 import '../products/products_screen.dart';
-import '../sales/sales_dashboard_screen.dart';
-import '../expenses/expenses_dashboard.dart';
+import '../sales/sales_main_screen.dart';
+import '../expenses/expenses_list_screen.dart';
+import '../purchases/purchases_screen.dart';
+import '../other_incomes/other_incomes_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -146,6 +151,9 @@ class DashboardHomeWidget extends StatefulWidget {
 
 class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
   double _totalSales = 0.0;
+  double _totalPurchases = 0.0;
+  double _totalOtherIncomes = 0.0;
+  double _totalExpenses = 0.0;
   Timer? _refreshTimer;
 
   @override
@@ -154,11 +162,17 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductProvider>().initializeProducts();
       _loadSalesData();
+      _loadPurchasesData();
+      _loadOtherIncomesData();
+      _loadExpensesData();
     });
     
     _refreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (mounted) {
         _loadSalesData();
+        _loadPurchasesData();
+        _loadOtherIncomesData();
+        _loadExpensesData();
       }
     });
   }
@@ -185,6 +199,69 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
       if (mounted) {
         setState(() {
           _totalSales = 0.0;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadPurchasesData() async {
+    if (!mounted) return;
+
+    try {
+      final purchasesProvider = context.read<PurchasesProvider>();
+      await purchasesProvider.loadPurchases();
+
+      if (mounted) {
+        setState(() {
+          _totalPurchases = purchasesProvider.totalPurchasesInvoiceAmount;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _totalPurchases = 0.0;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadOtherIncomesData() async {
+    if (!mounted) return;
+
+    try {
+      final otherIncomeProvider = context.read<OtherIncomeProvider>();
+      await otherIncomeProvider.loadOtherIncomes();
+
+      if (mounted) {
+        setState(() {
+          _totalOtherIncomes = otherIncomeProvider.totalAmount;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _totalOtherIncomes = 0.0;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadExpensesData() async {
+    if (!mounted) return;
+
+    try {
+      final expenseProvider = context.read<ExpenseProvider>();
+      await expenseProvider.loadAllExpenses();
+
+      if (mounted) {
+        setState(() {
+          _totalExpenses = expenseProvider.totalAmount;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _totalExpenses = 0.0;
         });
       }
     }
@@ -255,7 +332,7 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const SalesDashboardScreen(),
+                        builder: (context) => const SalesMainScreen(),
                       ),
                     );
                   },
@@ -265,9 +342,16 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
               Expanded(
                 child: _buildStatCard(
                   'Purchases',
-                  '\$0',
+                  '\$${_totalPurchases.toStringAsFixed(2)}',
                   Icons.shopping_cart,
                   Colors.blue,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PurchasesScreen(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -278,13 +362,13 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
               Expanded(
                 child: _buildStatCard(
                   'Expenses',
-                  '\$0',
+                  '\$${_totalExpenses.toStringAsFixed(2)}',
                   Icons.money_off,
                   Colors.red,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const ExpensesDashboard(),
+                        builder: (context) => const ExpensesListScreen(),
                       ),
                     );
                   },
@@ -294,9 +378,16 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
               Expanded(
                 child: _buildStatCard(
                   'Other Incomes',
-                  '\$0',
+                  '\$${_totalOtherIncomes.toStringAsFixed(2)}',
                   Icons.attach_money,
                   Colors.orange,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const OtherIncomesScreen(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

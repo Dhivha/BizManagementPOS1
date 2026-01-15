@@ -15,6 +15,27 @@ class ExpenseProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  double get totalAmount {
+    return _expenses.fold(0, (sum, expense) => sum + expense.amount);
+  }
+
+  Future<void> loadAllExpenses() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      _expenses = await _expenseService.loadExpensesByCategory('Butchery');
+      _filteredExpenses = _expenses;
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
   Future<Map<String, dynamic>> captureExpense({
     required int userId,
     required DateTime expenseDate,

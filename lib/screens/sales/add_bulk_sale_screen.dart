@@ -57,14 +57,23 @@ class _AddBulkSaleScreenState extends State<AddBulkSaleScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Success'),
+          title: Row(
+            children: [
+              Icon(Icons.check_circle, color: AppTheme.gold, size: 32),
+              const SizedBox(width: 12),
+              const Text('Success'),
+            ],
+          ),
           content: Text(result['message']),
           actions: [
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.gold,
+              ),
               child: const Text('OK'),
             ),
           ],
@@ -74,11 +83,20 @@ class _AddBulkSaleScreenState extends State<AddBulkSaleScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Error'),
+          title: const Row(
+            children: [
+              Icon(Icons.error, color: Colors.red, size: 32),
+              SizedBox(width: 12),
+              Text('Error'),
+            ],
+          ),
           content: Text(result['message']),
           actions: [
-            TextButton(
+            ElevatedButton(
               onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.gold,
+              ),
               child: const Text('OK'),
             ),
           ],
