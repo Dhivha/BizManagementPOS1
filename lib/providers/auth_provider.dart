@@ -82,8 +82,8 @@ class AuthProvider extends ChangeNotifier {
       await StorageManager.saveToken(token);
       await StorageManager.saveUserId(user.id.toString());
       await StorageManager.saveUserEmail(user.username);
+      await StorageManager.saveUsername(user.fullName);
       
-      // Save user to local SQLite database
       await _databaseHelper.insertUser(user);
       await _databaseHelper.saveAuthToken(token, user.id);
       

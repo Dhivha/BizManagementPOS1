@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../providers/expense_provider.dart';
 import '../../models/expense.dart';
+import '../../utils/app_theme.dart';
 
 class ViewExpensesScreen extends StatefulWidget {
   const ViewExpensesScreen({super.key});
@@ -114,24 +115,61 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
     final expenseProvider = Provider.of<ExpenseProvider>(context);
 
     return Scaffold(
+      backgroundColor: AppTheme.primaryNavy,
       appBar: AppBar(
-        title: const Text('View Expenses'),
-        backgroundColor: const Color(0xFF1976D2),
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text(
+          'View Expenses',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: _loadExpenses,
           ),
         ],
       ),
-      body: Column(
-        children: [
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppTheme.primaryNavy,
+              AppTheme.primaryNavy.withValues(alpha: 0.8),
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
           Card(
             margin: const EdgeInsets.all(16),
-            elevation: 4,
-            child: Padding(
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+              side: BorderSide(color: AppTheme.gold.withValues(alpha: 0.3)),
+            ),
+            color: AppTheme.primaryNavy,
+            child: Container(
               padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.gold.withValues(alpha: 0.1),
+                    AppTheme.gold.withValues(alpha: 0.05),
+                  ],
+                ),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -140,6 +178,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -154,7 +193,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                               vertical: 12,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(color: AppTheme.gold.withValues(alpha: 0.5)),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Row(
@@ -166,11 +205,11 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                                       : DateFormat('yyyy-MM-dd').format(_startDate!),
                                   style: TextStyle(
                                     color: _startDate == null
-                                        ? Colors.grey
-                                        : Colors.black,
+                                        ? Colors.white.withValues(alpha: 0.5)
+                                        : Colors.white,
                                   ),
                                 ),
-                                const Icon(Icons.calendar_today, size: 20),
+                                const Icon(Icons.calendar_today, size: 20, color: AppTheme.gold),
                               ],
                             ),
                           ),
@@ -186,7 +225,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                               vertical: 12,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(color: AppTheme.gold.withValues(alpha: 0.5)),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Row(
@@ -198,11 +237,11 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                                       : DateFormat('yyyy-MM-dd').format(_endDate!),
                                   style: TextStyle(
                                     color: _endDate == null
-                                        ? Colors.grey
-                                        : Colors.black,
+                                        ? Colors.white.withValues(alpha: 0.5)
+                                        : Colors.white,
                                   ),
                                 ),
-                                const Icon(Icons.calendar_today, size: 20),
+                                const Icon(Icons.calendar_today, size: 20, color: AppTheme.gold),
                               ],
                             ),
                           ),
@@ -219,7 +258,8 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                           icon: const Icon(Icons.filter_alt),
                           label: const Text('Apply Filter'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: AppTheme.gold,
+                            foregroundColor: AppTheme.primaryNavy,
                           ),
                         ),
                       ),
@@ -231,7 +271,8 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                             icon: const Icon(Icons.clear),
                             label: const Text('Clear Filter'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey,
+                              backgroundColor: AppTheme.gold.withValues(alpha: 0.7),
+                              foregroundColor: AppTheme.primaryNavy,
                             ),
                           ),
                         ),
@@ -244,7 +285,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
           ),
           Expanded(
             child: expenseProvider.isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator(color: AppTheme.gold))
                 : expenseProvider.error != null
                     ? Center(
                         child: Column(
@@ -257,6 +298,10 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _loadExpenses,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.gold,
+                                foregroundColor: AppTheme.primaryNavy,
+                              ),
                               child: const Text('Retry'),
                             ),
                           ],
@@ -266,7 +311,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                         ? const Center(
                             child: Text(
                               'No expenses found',
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           )
                         : ListView.builder(
@@ -280,15 +325,30 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
           ),
         ],
       ),
+      ),
     );
   }
 
   Widget _buildExpenseCard(Expense expense) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      child: Padding(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: AppTheme.gold.withValues(alpha: 0.3)),
+      ),
+      color: AppTheme.primaryNavy,
+      child: Container(
         padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.gold.withValues(alpha: 0.1),
+              AppTheme.gold.withValues(alpha: 0.05),
+            ],
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -300,7 +360,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: AppTheme.gold,
                   ),
                 ),
                 Container(
@@ -323,7 +383,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            const Divider(),
+            Divider(color: AppTheme.gold.withValues(alpha: 0.3)),
             const SizedBox(height: 8),
             _buildInfoRow(Icons.category, 'Category', expense.category),
             const SizedBox(height: 8),
@@ -358,7 +418,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: Colors.grey[600]),
+        Icon(icon, size: 18, color: AppTheme.gold),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -368,7 +428,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                 label,
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[600],
+                  color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
               Text(
@@ -376,6 +436,7 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
               ),
             ],

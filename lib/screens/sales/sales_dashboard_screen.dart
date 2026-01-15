@@ -3,6 +3,8 @@ import '../../utils/app_theme.dart';
 import 'add_new_sale_screen.dart';
 import 'view_sales_screen.dart';
 import 'sales_reports_screen.dart';
+import 'add_bulk_sale_screen.dart';
+import 'view_bulk_sales_screen.dart';
 
 class SalesDashboardScreen extends StatelessWidget {
   const SalesDashboardScreen({super.key});
@@ -71,16 +73,15 @@ class SalesDashboardScreen extends StatelessWidget {
                 const SizedBox(height: 30),
                 Expanded(
                   child: GridView.count(
-                    crossAxisCount: 1,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 4,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.85,
                     children: [
                       _buildSalesOptionCard(
                         context,
                         title: 'Add New Sale',
-                        subtitle: 'Create a new sales transaction',
                         icon: Icons.add_shopping_cart,
-                        color: Colors.green,
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -92,9 +93,7 @@ class SalesDashboardScreen extends StatelessWidget {
                       _buildSalesOptionCard(
                         context,
                         title: 'View Sales',
-                        subtitle: 'Browse and manage existing sales',
                         icon: Icons.receipt_long,
-                        color: Colors.blue,
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -106,13 +105,35 @@ class SalesDashboardScreen extends StatelessWidget {
                       _buildSalesOptionCard(
                         context,
                         title: 'Sales Reports',
-                        subtitle: 'View analytics and sales insights',
                         icon: Icons.analytics,
-                        color: Colors.purple,
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => const SalesReportsScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildSalesOptionCard(
+                        context,
+                        title: 'Add Bulk Sale',
+                        icon: Icons.shopping_basket,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AddBulkSaleScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildSalesOptionCard(
+                        context,
+                        title: 'View Bulk Sales',
+                        icon: Icons.inventory_2,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ViewBulkSalesScreen(),
                             ),
                           );
                         },
@@ -131,9 +152,7 @@ class SalesDashboardScreen extends StatelessWidget {
   Widget _buildSalesOptionCard(
     BuildContext context, {
     required String title,
-    required String subtitle,
     required IconData icon,
-    required Color color,
     required VoidCallback onTap,
   }) {
     return Card(
@@ -152,54 +171,35 @@ class SalesDashboardScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             gradient: LinearGradient(
               colors: [
-                color.withValues(alpha: 0.1),
-                color.withValues(alpha: 0.05),
+                AppTheme.gold.withValues(alpha: 0.1),
+                AppTheme.gold.withValues(alpha: 0.05),
               ],
             ),
           ),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppTheme.gold.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Icon(
                   icon,
-                  color: color,
-                  size: 28,
+                  color: AppTheme.gold,
+                  size: 48,
                 ),
               ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 16),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                color: AppTheme.gold,
-                size: 20,
               ),
             ],
           ),

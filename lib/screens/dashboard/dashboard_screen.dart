@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 import '../../providers/auth_provider.dart';
 import '../../providers/product_provider.dart';
+import '../../providers/bulk_sales_provider.dart';
+import '../../utils/app_theme.dart';
 import '../products/products_screen.dart';
 import '../sales/sales_dashboard_screen.dart';
 import '../expenses/expenses_dashboard.dart';
@@ -142,13 +145,49 @@ class DashboardHomeWidget extends StatefulWidget {
 }
 
 class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
+  double _totalSales = 0.0;
+  Timer? _refreshTimer;
+
   @override
   void initState() {
     super.initState();
-    // Initialize products when dashboard loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductProvider>().initializeProducts();
+      _loadSalesData();
     });
+    
+    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted) {
+        _loadSalesData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadSalesData() async {
+    if (!mounted) return;
+
+    try {
+      final bulkSalesProvider = context.read<BulkSalesProvider>();
+      final total = await bulkSalesProvider.getTotalSalesAmount();
+
+      if (mounted) {
+        setState(() {
+          _totalSales = total;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _totalSales = 0.0;
+        });
+      }
+    }
   }
 
   @override
@@ -205,18 +244,12 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
           ),
           const SizedBox(height: 24),
 
-          // Quick Stats
-          const Text(
-            'Quick Overview',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: _buildStatCard(
                   'Sales',
-                  '\$0',
+                  '\$${_totalSales.toStringAsFixed(2)}',
                   Icons.point_of_sale,
                   Colors.green,
                   onTap: () {
@@ -296,65 +329,6 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
-
-          // Quick Actions
-          const Text(
-            'Quick Actions',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.add_business),
-                  title: const Text('Add New Business'),
-                  subtitle: const Text('Register a new business'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Add Business feature coming soon!')),
-                    );
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.assessment),
-                  title: const Text('View Analytics'),
-                  subtitle: const Text('Check your business performance'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Analytics feature coming soon!')),
-                    );
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.print),
-                  title: const Text('Receipt Printer'),
-                  subtitle: const Text('Configure auto-receipt printing'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/printer-settings');
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Settings'),
-                  subtitle: const Text('Manage your preferences'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/printer-settings');
-                  },
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -363,34 +337,35 @@ class _DashboardHomeWidgetState extends State<DashboardHomeWidget> {
   Widget _buildStatCard(
       String title, String value, IconData icon, Color color, {VoidCallback? onTap}) {
     return Card(
+      elevation: 4,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(icon, color: color, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(icon, color: AppTheme.gold, size: 32),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       title,
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (onTap != null)
-                    const Icon(Icons.arrow_forward_ios, size: 12, color: Colors.grey),
+                    const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               Text(
                 value,
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
               ),

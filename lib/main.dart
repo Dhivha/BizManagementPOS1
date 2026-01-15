@@ -4,6 +4,7 @@ import 'providers/auth_provider.dart';
 import 'providers/product_provider.dart';
 import 'providers/sales_provider.dart';
 import 'providers/expense_provider.dart';
+import 'providers/bulk_sales_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/dashboard/dashboard_screen.dart';
@@ -27,6 +28,7 @@ class BizManagementApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => SalesProvider()),
         ChangeNotifierProvider(create: (_) => ExpenseProvider()),
+        ChangeNotifierProvider(create: (_) => BulkSalesProvider()),
       ],
       builder: (context, child) {
         // Initialize provider dependencies after all providers are created

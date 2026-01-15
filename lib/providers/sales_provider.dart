@@ -18,6 +18,7 @@ class SalesProvider extends ChangeNotifier {
 
   List<Sale> get queuedSales => _queuedSales;
   List<Sale> get syncedSales => _syncedSales;
+  List<Sale> get sales => [..._queuedSales, ..._syncedSales];
   bool get isLoading => _isLoading;
   User? get currentUser => _currentUser;
   BluetoothReceiptService get receiptService => _receiptService;

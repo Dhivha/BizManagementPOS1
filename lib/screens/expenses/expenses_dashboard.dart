@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'capture_expense_screen.dart';
 import 'view_expenses_screen.dart';
+import '../../utils/app_theme.dart';
 
 class ExpensesDashboard extends StatelessWidget {
   const ExpensesDashboard({super.key});
@@ -8,45 +9,57 @@ class ExpensesDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.primaryNavy,
       appBar: AppBar(
         title: const Text('Expenses'),
-        backgroundColor: const Color(0xFF1976D2),
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildDashboardCard(
-              context,
-              title: 'Capture Expense',
-              icon: Icons.add_circle_outline,
-              color: Colors.blue,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CaptureExpenseScreen(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildDashboardCard(
-              context,
-              title: 'View Expenses',
-              icon: Icons.list_alt,
-              color: Colors.green,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ViewExpensesScreen(),
-                  ),
-                );
-              },
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppTheme.primaryNavy,
+              AppTheme.primaryNavy.withValues(alpha: 0.8),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildDashboardCard(
+                context,
+                title: 'Capture Expense',
+                icon: Icons.add_circle_outline,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CaptureExpenseScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              _buildDashboardCard(
+                context,
+                title: 'View Expenses',
+                icon: Icons.list_alt,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ViewExpensesScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -56,28 +69,41 @@ class ExpensesDashboard extends StatelessWidget {
     BuildContext context, {
     required String title,
     required IconData icon,
-    required Color color,
     required VoidCallback onTap,
   }) {
     return Card(
-      elevation: 4,
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: AppTheme.gold.withValues(alpha: 0.3)),
+      ),
+      color: AppTheme.primaryNavy,
       child: InkWell(
         onTap: onTap,
         child: Container(
           height: 120,
           padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            gradient: LinearGradient(
+              colors: [
+                AppTheme.gold.withValues(alpha: 0.1),
+                AppTheme.gold.withValues(alpha: 0.05),
+              ],
+            ),
+          ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
+                  color: AppTheme.gold.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   icon,
                   size: 40,
-                  color: color,
+                  color: AppTheme.gold,
                 ),
               ),
               const SizedBox(width: 16),
@@ -87,10 +113,11 @@ class ExpensesDashboard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios),
+              const Icon(Icons.arrow_forward_ios, color: AppTheme.gold),
             ],
           ),
         ),

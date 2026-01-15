@@ -63,6 +63,16 @@ class StorageManager {
     return prefs.getString(_userEmailKey);
   }
 
+  static Future<void> saveUsername(String username) async {
+    final prefs = await _prefs;
+    await prefs.setString('username', username);
+  }
+
+  static Future<String?> getUsername() async {
+    final prefs = await _prefs;
+    return prefs.getString('username');
+  }
+
   // Clear all user data
   static Future<void> clearUserData() async {
     final prefs = await _prefs;
