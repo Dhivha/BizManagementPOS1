@@ -20,7 +20,7 @@ dependencies:
   
   # Database
   sqflite: ^2.3.0
-  path: ^1.8.3
+  path: ^1.8.3 
   
   # UI Components
   cupertino_icons: ^1.0.2

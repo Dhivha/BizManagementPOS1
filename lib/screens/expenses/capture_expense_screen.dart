@@ -17,7 +17,7 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
   final _narrationController = TextEditingController();
   final _notesController = TextEditingController();
   final _amountController = TextEditingController();
-  
+
   DateTime _selectedDate = DateTime.now();
   String _selectedPaymentMethod = 'Cash';
 
@@ -64,7 +64,8 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
     final amount = double.parse(_amountController.text);
 
     if (!mounted) return;
-    final expenseProvider = Provider.of<ExpenseProvider>(context, listen: false);
+    final expenseProvider =
+        Provider.of<ExpenseProvider>(context, listen: false);
 
     final result = await expenseProvider.captureExpense(
       userId: int.parse(userId),
@@ -173,35 +174,25 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
     final expenseProvider = Provider.of<ExpenseProvider>(context);
 
     return Scaffold(
-      backgroundColor: AppTheme.primaryNavy,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text(
-          'Capture Expense',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        backgroundColor: AppTheme.backgroundDark,
+        appBar: AppBar(
+          backgroundColor: AppTheme.primaryNavy,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: const Text(
+            'Capture Expense',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
           ),
         ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppTheme.primaryNavy,
-              AppTheme.primaryNavy.withValues(alpha: 0.8),
-            ],
-          ),
-        ),
-        child: SingleChildScrollView(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
@@ -218,7 +209,8 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                         vertical: 16,
                       ),
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        border: Border.all(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -226,9 +218,11 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                         children: [
                           Text(
                             DateFormat('yyyy-MM-dd').format(_selectedDate),
-                            style: const TextStyle(fontSize: 16, color: Colors.white),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
                           ),
-                          const Icon(Icons.calendar_today, color: AppTheme.gold),
+                          const Icon(Icons.calendar_today,
+                              color: AppTheme.gold),
                         ],
                       ),
                     ),
@@ -243,18 +237,24 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: 'Enter amount',
-                      hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      hintStyle:
+                          TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      filled: true,
+                      fillColor: Colors.transparent,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppTheme.gold, width: 2),
+                        borderSide:
+                            const BorderSide(color: AppTheme.gold, width: 2),
                       ),
                       prefixText: '\$ ',
                       prefixStyle: const TextStyle(color: AppTheme.gold),
@@ -278,18 +278,24 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: 'Enter narration',
-                      hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      hintStyle:
+                          TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      filled: true,
+                      fillColor: Colors.transparent,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppTheme.gold, width: 2),
+                        borderSide:
+                            const BorderSide(color: AppTheme.gold, width: 2),
                       ),
                     ),
                     validator: (value) {
@@ -308,19 +314,26 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                     maxLines: 3,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                      hintText: 'If empty, will default to "Payment of (Narration)"',
-                      hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      hintText:
+                          'If empty, will default to "Payment of (Narration)"',
+                      hintStyle:
+                          TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      filled: true,
+                      fillColor: Colors.transparent,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppTheme.gold, width: 2),
+                        borderSide:
+                            const BorderSide(color: AppTheme.gold, width: 2),
                       ),
                     ),
                   ),
@@ -333,31 +346,39 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                     dropdownColor: AppTheme.primaryNavy,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.transparent,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppTheme.gold.withValues(alpha: 0.5)),
+                        borderSide: BorderSide(
+                            color: AppTheme.gold.withValues(alpha: 0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppTheme.gold, width: 2),
+                        borderSide:
+                            const BorderSide(color: AppTheme.gold, width: 2),
                       ),
                     ),
                     items: const [
                       DropdownMenuItem(
                         value: 'Cash',
-                        child: Text('Cash', style: TextStyle(color: Colors.white)),
+                        child:
+                            Text('Cash', style: TextStyle(color: Colors.white)),
                       ),
                       DropdownMenuItem(
                         value: 'Bank',
-                        child: Text('Bank', style: TextStyle(color: Colors.white)),
+                        child:
+                            Text('Bank', style: TextStyle(color: Colors.white)),
                       ),
                       DropdownMenuItem(
                         value: 'Credit',
-                        child: Text('Credit', style: TextStyle(color: Colors.white)),
+                        child: Text('Credit',
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ],
                     onChanged: (value) {
@@ -374,7 +395,8 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: expenseProvider.isLoading ? null : _submitExpense,
+                    onPressed:
+                        expenseProvider.isLoading ? null : _submitExpense,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.gold,
                       foregroundColor: AppTheme.primaryNavy,
@@ -383,18 +405,18 @@ class _CaptureExpenseScreenState extends State<CaptureExpenseScreen> {
                       ),
                     ),
                     child: expenseProvider.isLoading
-                        ? const CircularProgressIndicator(color: AppTheme.primaryNavy)
+                        ? const CircularProgressIndicator(
+                            color: AppTheme.primaryNavy)
                         : const Text(
                             'Submit Expense',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

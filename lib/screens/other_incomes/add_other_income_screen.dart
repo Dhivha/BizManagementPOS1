@@ -45,7 +45,8 @@ class _AddOtherIncomeScreenState extends State<AddOtherIncomeScreen> {
         department: 'Butchery',
       );
 
-      await Provider.of<OtherIncomeProvider>(context, listen: false).createOtherIncome(request);
+      await Provider.of<OtherIncomeProvider>(context, listen: false)
+          .createOtherIncome(request);
 
       if (mounted) {
         await showDialog(
@@ -111,9 +112,13 @@ class _AddOtherIncomeScreenState extends State<AddOtherIncomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundDark,
       appBar: AppBar(
-        title: const Text('Capture Income'),
-        backgroundColor: AppTheme.gold,
+        title:
+            const Text('Capture Income', style: TextStyle(color: Colors.white)),
+        backgroundColor: AppTheme.primaryNavy,
+        centerTitle: true,
+        elevation: 0,
       ),
       body: _isSaving
           ? const Center(child: CircularProgressIndicator())
@@ -122,63 +127,132 @@ class _AddOtherIncomeScreenState extends State<AddOtherIncomeScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Income Details', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppTheme.gold)),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _amountController,
-                            decoration: const InputDecoration(
-                              labelText: 'Amount',
-                              prefixText: '\$ ',
-                              border: OutlineInputBorder(),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryNavy.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                          color: AppTheme.gold.withValues(alpha: 0.3)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Income Details',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                    color: AppTheme.gold,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _amountController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Amount',
+                            labelStyle: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7)),
+                            prefixText: '\$ ',
+                            prefixStyle: const TextStyle(color: Colors.white),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppTheme.gold.withValues(alpha: 0.5)),
                             ),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'Invalid number';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _categoryController,
-                            decoration: const InputDecoration(
-                              labelText: 'Category',
-                              border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppTheme.gold.withValues(alpha: 0.5)),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _narrationController,
-                            decoration: const InputDecoration(
-                              labelText: 'Narration',
-                              border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  color: AppTheme.gold, width: 2),
                             ),
-                            maxLines: 3,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              return null;
-                            },
                           ),
-                        ],
-                      ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Required';
+                            }
+                            if (double.tryParse(value) == null) {
+                              return 'Invalid number';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _categoryController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Category',
+                            labelStyle: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7)),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppTheme.gold.withValues(alpha: 0.5)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppTheme.gold.withValues(alpha: 0.5)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  color: AppTheme.gold, width: 2),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Required';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _narrationController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Narration',
+                            labelStyle: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7)),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppTheme.gold.withValues(alpha: 0.5)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppTheme.gold.withValues(alpha: 0.5)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  color: AppTheme.gold, width: 2),
+                            ),
+                          ),
+                          maxLines: 3,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Required';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 24),
